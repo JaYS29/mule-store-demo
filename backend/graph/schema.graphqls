@@ -1,0 +1,118 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  store: Store!
+  myStore: Store
+  storeById(id: ID!): Store
+  storeBySlug(slug: String!): Store
+  stores: [Store!]!
+  productTemplates: [Product!]!
+  products(limit: Int, offset: Int): [Product!]!
+  product(id: ID, slug: String): Product
+  productByStoreSlug(storeSlug: String!, productSlug: String!): Product
+}
+
+type Mutation {
+  addToCart(cartId: ID, productId: ID!, variantId: ID!, quantity: Int!): Cart!
+  updateCartItem(cartId: ID!, itemId: ID!, quantity: Int!): Cart!
+  removeCartItem(cartId: ID!, itemId: ID!): Cart!
+  createStore(input: CreateStoreInput!): Store!
+  updateStore(id: ID!, input: UpdateStoreInput!): Store!
+  createProduct(input: CreateProductInput!): Product!
+  createStoreProduct(input: CreateStoreProductInput!): Product!
+  createVariant(input: CreateVariantInput!): Variant!
+  deleteStoreProduct(productId: ID!): Boolean!
+  followStore(storeId: ID!): Store!
+  unfollowStore(storeId: ID!): Store!
+}
+
+type Store {
+  id: ID!
+  slug: String!
+  name: String!
+  heroTitle: String!
+  heroSubtitle: String!
+  heroImage: String!
+  followersCount: Int!
+  isFollowing: Boolean!
+  products: [Product!]!
+}
+
+input CreateStoreInput {
+  name: String!
+  heroTitle: String!
+  heroSubtitle: String!
+  heroImage: String!
+}
+
+input UpdateStoreInput {
+  name: String
+  heroTitle: String
+  heroSubtitle: String
+  heroImage: String
+}
+
+input CreateProductInput {
+  storeId: ID!
+  name: String!
+  slug: String!
+  description: String!
+  imageUrl: String!
+}
+
+input CreateVariantInput {
+  productId: ID!
+  name: String!
+  sku: String!
+  priceCents: Int!
+}
+
+input CreateStoreProductInput {
+  storeId: ID!
+  templateProductId: ID!
+  name: String!
+  slug: String!
+  imageUrl: String!
+}
+
+type Product {
+  id: ID!
+  storeName: String!
+  storeSlug: String!
+  name: String!
+  slug: String!
+  description: String!
+  imageUrl: String!
+  price: Money!
+  variants: [Variant!]!
+}
+
+type Variant {
+  id: ID!
+  name: String!
+  sku: String!
+  price: Money!
+}
+
+type Money {
+  amount: Int!
+  currency: String!
+}
+
+type Cart {
+  id: ID!
+  items: [CartItem!]!
+  subtotal: Money!
+  total: Money!
+}
+
+type CartItem {
+  id: ID!
+  product: Product!
+  variant: Variant!
+  quantity: Int!
+  lineTotal: Money!
+}
