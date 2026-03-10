@@ -26,7 +26,8 @@ export default async function StorePage({
     );
   }
 
-  const products = data.storeBySlug.products ?? [];
+  const store = data.storeBySlug;
+  const products = store.products ?? [];
 
   return (
     <main className="mx-auto w-[min(1200px,92%)] py-12">
@@ -69,7 +70,7 @@ export default async function StorePage({
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/${data.storeBySlug.slug}/item/${product.slug}`}
+              href={`/${store.slug}/item/${product.slug}`}
               className="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:border-gray-300"
             >
               <div className="relative aspect-4/3 bg-gray-100">

@@ -130,8 +130,12 @@ export default function SetupProductsPage() {
   }, [apiBase]);
 
   const handleChange = (field: keyof ProductInput) => {
-    return (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setForm((prev) => ({ ...prev, [field]: event.target.value }));
+    return (
+      event:
+        | ChangeEvent<HTMLInputElement>
+        | ChangeEvent<HTMLTextAreaElement>
+        | ChangeEvent<HTMLSelectElement>
+    ) => setForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
