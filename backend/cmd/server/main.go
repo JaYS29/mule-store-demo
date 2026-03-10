@@ -207,7 +207,8 @@ func main() {
 			Value:    token,
 			Path:     "/",
 			HttpOnly: true,
-			SameSite: http.SameSiteLaxMode,
+			SameSite: http.SameSiteNoneMode,
+			Secure:   true,
 			MaxAge:   int((7 * 24 * time.Hour).Seconds()),
 		})
 		w.Header().Set("Content-Type", "application/json")
@@ -256,7 +257,8 @@ func main() {
 			Value:    "",
 			Path:     "/",
 			HttpOnly: true,
-			SameSite: http.SameSiteLaxMode,
+			SameSite: http.SameSiteNoneMode,
+			Secure:   true,
 			MaxAge:   -1,
 		})
 		w.Header().Set("Content-Type", "application/json")
