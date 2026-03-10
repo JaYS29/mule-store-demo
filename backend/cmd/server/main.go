@@ -9,6 +9,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -25,6 +26,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/jackc/pgconn"
 	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
 	"github.com/stripe/stripe-go/v78"
@@ -116,6 +118,12 @@ func main() {
 		}
 		userID, err := postgres.CreateUser(r.Context(), user)
 		if err != nil {
+			var pgErr *pgconn.PgError
+			if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+				http.Error(w, "email already in use", http.StatusBadRequest)
+				return
+			}
+			log.Printf("CreateUser failed: %v", err)
 			http.Error(w, "registration failed", http.StatusBadRequest)
 			return
 		}
