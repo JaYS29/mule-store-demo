@@ -54,6 +54,7 @@ export default function CheckoutPage() {
           userId: Number(user.id),
           email: user.email,
         }),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Stripe checkout failed");

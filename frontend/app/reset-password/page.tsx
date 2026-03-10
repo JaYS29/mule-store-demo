@@ -34,6 +34,7 @@ function ResetPasswordContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password }),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Reset failed");

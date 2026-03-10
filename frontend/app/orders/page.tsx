@@ -156,6 +156,7 @@ export default function OrdersPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orderId }),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("repeat failed");

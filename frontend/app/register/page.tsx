@@ -49,6 +49,7 @@ export default function RegisterPage() {
           phone: phone ? `${dialCode} ${phone}` : "",
           password,
         }),
+        credentials: "include",
       });
       if (!response.ok) {
         throw new Error("Registration failed");
