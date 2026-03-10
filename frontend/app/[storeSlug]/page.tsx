@@ -26,6 +26,8 @@ export default async function StorePage({
     );
   }
 
+  const products = data.storeBySlug.products ?? [];
+
   return (
     <main className="mx-auto w-[min(1200px,92%)] py-12">
       <section className="grid gap-8 rounded-3xl border border-gray-200 bg-white p-8 lg:grid-cols-2 lg:items-center">
@@ -61,12 +63,10 @@ export default async function StorePage({
       <section className="py-10">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-semibold text-gray-900">Products</h2>
-          <span className="text-sm text-gray-500">
-            {data.storeBySlug.products.length} items
-          </span>
+          <span className="text-sm text-gray-500">{products.length} items</span>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {data.storeBySlug.products?.map((product) => (
+          {products.map((product) => (
             <Link
               key={product.id}
               href={`/${data.storeBySlug.slug}/item/${product.slug}`}
