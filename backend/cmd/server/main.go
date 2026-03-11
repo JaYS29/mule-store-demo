@@ -988,7 +988,7 @@ func sendReceiptEmail(email string, items []store.OrderItem, total int, currency
       </tbody>
     </table>
     <div style="margin-top: 16px; border-top: 1px solid #e5e7eb; padding-top: 12px; display: flex; justify-content: space-between; font-weight: 600; color: #111827;">
-      <span>Total </span>
+      <span style="margin-right: 8px;">Total</span>
       <span>%s</span>
     </div>
   </div>
