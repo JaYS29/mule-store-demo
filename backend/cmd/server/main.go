@@ -38,7 +38,12 @@ import (
 )
 
 func main() {
-	_ = godotenv.Load("../.env", ".env")
+	// Only load local .env files when not running on Railway.
+	// Railway injects environment variables itself, and loading .env there
+	// would override those values (e.g. FRONTEND_URL) with local defaults.
+	if os.Getenv("RAILWAY_ENVIRONMENT") == "" {
+		_ = godotenv.Load("../.env", ".env")
+	}
 
 	port := getEnv("PORT", "8080")
 	dbURL := getEnv("DATABASE_URL", "postgres://store:store@localhost:5432/store?sslmode=disable")
@@ -81,6 +86,7 @@ func main() {
 	})
 	http.Handle("/query", cors(origin, gqlHandler))
 	http.Handle("/auth/register", cors(origin, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
 		if r.Method != http.MethodPost {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
@@ -131,12 +137,16 @@ func main() {
 		if err == nil {
 			tokenHash := hashToken(token)
 			if err := postgres.CreateEmailVerification(r.Context(), userID, tokenHash); err == nil {
-				verifyLink := "http://localhost:3000/verify-email?token=" + token
-				sendVerificationEmail(user.Email, verifyLink)
+				baseURL := getEnv("FRONTEND_URL", "http://localhost:3000")
+				verifyLink := baseURL + "/verify-email?token=" + token
+				go sendVerificationEmail(user.Email, verifyLink)
 			}
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(map[string]bool{"ok": true})
+		if err := json.NewEncoder(w).Encode(map[string]bool{"ok": true}); err != nil {
+			log.Printf("encode register response failed: %v", err)
+		}
+		log.Printf("register completed for %s in %s", user.Email, time.Since(start))
 	})))
 	http.Handle("/auth/verify-email", cors(origin, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
