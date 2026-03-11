@@ -69,3 +69,23 @@ You need to have installed Docker before running locally the app
 ## Environment
 
 Copy `.env.example` to `.env` in the project root and customize the values.
+
+## 🧪 Test credentials
+
+You can log in with the following demo account without registering:
+
+| Field        | Value                           |
+| ------------ | ------------------------------- |
+| **Email**    | mulestoredemo@bscse.okcx.edu.rs |
+| **Password** | `Demo1234`                      |
+
+## 💳 Test payments
+
+This demo uses Stripe in test mode. Use the following card to complete a checkout:
+
+| Field           | Value               |
+| --------------- | ------------------- |
+| **Name**        | Your name           |
+| **Card number** | 4242 4242 4242 4242 |
+| **Expiry**      | Any future date     |
+| **CVC**         | Any 3 digits        |
